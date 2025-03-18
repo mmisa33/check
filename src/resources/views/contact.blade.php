@@ -11,7 +11,7 @@
 
     {{--  問い合わせフォーム  --}}
     <div class="contact-form__inner">
-        <form action="confirm" method="post">
+        <form action="/confirm" method="post">
             @csrf
             {{--  名前入力  --}}
             <div class="contact-form__group contact-form__name-group">
@@ -26,12 +26,12 @@
                 </div>
                 {{--  エラーメッセージ  --}}
                 <div class="contact-form__error-message">
-                    @if ($errors->has('first_name'))
-                    <p class="contact-form__error-message-first-name">{{$errors->first('first_name')}}</p>
-                    @endif
-                    @if ($errors->has('last_name'))
-                    <p class="contact-form__error-message-last-name">{{$errors->first('last_name')}}</p>
-                    @endif
+                    @error('last_name')
+                    <span>{{ $message }}</span>
+                    @enderror
+                    @error('first_name')
+                    <span>{{ $message }}</span>
+                    @enderror
                 </div>
             </div>
 
@@ -109,6 +109,20 @@
                     {{$errors->first('tel_3')}}
                     @endif
                 </p>
+                {{-- 各電話番号フィールドのエラーを統一＆重複したエラーメッセージを表示しない処理
+                <div class="form__error">
+                    @php
+                        $messages = [];
+                    @endphp
+                    @foreach (['tel_area', 'tel_number', 'tel_end'] as $field)
+                        @foreach ($errors->get($field) as $error)
+                            @if (!isset($messages[$error]))
+                                <span>{{ $error }}</span>
+                                @php $messages[$error] = true; @endphp
+                            @endif
+                        @endforeach
+                    @endforeach
+                </div> --}}
             </div>
 
             {{--  住所入力  --}}
